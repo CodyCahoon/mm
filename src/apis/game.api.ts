@@ -15,10 +15,7 @@ export namespace GameAPI {
         Western = 'A Wild West',
     }
 
-    export const themeAvailableCharacters: Record<
-        GameTheme,
-        CharacterAPI.Character[]
-    > = {
+    export const themeAvailableCharacters: Record<GameTheme, CharacterAPI.Character[]> = {
         [GameTheme.Western]: [
             CharacterAPI.init('Western Character #1'),
             CharacterAPI.init('Western Character #2'),
@@ -40,19 +37,13 @@ export namespace GameAPI {
     }
 
     export function toString(game: Game): string {
-        const players = game.players.reduce(
-            (players: string, p: PlayerAPI.Player) => {
-                return players.concat(PlayerAPI.toString(p) + '\n');
-            },
-            '',
-        );
+        const players = game.players.reduce((players: string, p: PlayerAPI.Player) => {
+            return players.concat(PlayerAPI.toString(p) + '\n');
+        }, '');
 
-        const murderers = game.murderers.reduce(
-            (murderers: string, m: PlayerAPI.Player) => {
-                return murderers.concat(PlayerAPI.toString(m) + '\n');
-            },
-            '',
-        );
+        const murderers = game.murderers.reduce((murderers: string, m: PlayerAPI.Player) => {
+            return murderers.concat(PlayerAPI.toString(m) + '\n');
+        }, '');
 
         return [
             '=====================================================',

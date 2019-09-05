@@ -29,9 +29,7 @@ export namespace RelationshipAPI {
         Neighbor,
     }
 
-    export type RelationshipType =
-        | FamilyRelationshipType
-        | FriendRelationshipType;
+    export type RelationshipType = FamilyRelationshipType | FriendRelationshipType;
 
     export function init(
         player1Id: string,
