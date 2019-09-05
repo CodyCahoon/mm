@@ -10,8 +10,7 @@
     },
     "scripts": {
         "mm": "tsc && node ./build/main.js",
-        "tsc": "tsc",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "tsc": "tsc"
     },
     "repository": {
         "type": "git",
