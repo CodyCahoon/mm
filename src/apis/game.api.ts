@@ -6,7 +6,6 @@ export namespace GameAPI {
     export interface Game {
         id: string;
 
-        murderers: PlayerAPI.Player[];
         players: PlayerAPI.Player[];
         theme: GameTheme;
     }
@@ -15,7 +14,7 @@ export namespace GameAPI {
         Western = 'A Wild West',
     }
 
-    export const themeAvailableCharacters: Record<GameTheme, CharacterAPI.Character[]> = {
+    export const availableCharactersByTheme: Record<GameTheme, CharacterAPI.Character[]> = {
         [GameTheme.Western]: [
             CharacterAPI.init('Western Character #1'),
             CharacterAPI.init('Western Character #2'),
@@ -30,7 +29,6 @@ export namespace GameAPI {
     export function init(theme: GameTheme): Game {
         return {
             id: IdUtil.generateUUID(),
-            murderers: [],
             players: [],
             theme,
         };
@@ -41,22 +39,17 @@ export namespace GameAPI {
             return players.concat(PlayerAPI.toString(p) + '\n');
         }, '');
 
-        const murderers = game.murderers.reduce((murderers: string, m: PlayerAPI.Player) => {
-            return murderers.concat(PlayerAPI.toString(m) + '\n');
-        }, '');
+        const murdererCount = game.players.filter((p) => p.type === PlayerAPI.PlayerType.Murderer);
 
         return [
             '=====================================================',
             '[Game]\n',
             'Game Theme\t' + game.theme,
             'Players\t\t' + game.players.length,
-            'Murderers\t' + game.murderers.length,
+            'Murderers\t' + murdererCount,
             '=====================================================',
             '[Players]',
             players,
-            '=====================================================',
-            '[Murderers]',
-            murderers,
         ].join('\n');
     }
 }

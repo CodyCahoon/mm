@@ -1,48 +1,78 @@
 import { IdUtil } from '../utils/id.util';
+import { CharacterAPI } from './character.api';
 
 export namespace RelationshipAPI {
     export interface Relationship {
         id: string;
-        player1Id: string;
-        player2Id: string;
-
-        timeline: RelationshipTimeline;
-        type: RelationshipType;
+        character: CharacterAPI.Character;
+        relation: Relation;
     }
 
-    export enum RelationshipTimeline {
-        Current,
-        Future,
-        Past,
+    export interface Relation {
+        timeline: RelationTimeline;
+        type: RelationType;
     }
 
-    export enum FamilyRelationshipType {
-        Child,
-        Parent,
-        Sibling,
-        Spouse,
+    export enum RelationTimeline {
+        Current = 'Currently',
+        Future = 'In the Future',
+        Past = 'In the Past',
     }
 
-    export enum FriendRelationshipType {
-        School,
-        Work,
-        Neighbor,
+    export enum FamilyRelationType {
+        Child = 'Child',
+        Parent = 'Parent',
+        Sibling = 'Sibling',
+        Spouse = 'Spouse',
     }
 
-    export type RelationshipType = FamilyRelationshipType | FriendRelationshipType;
+    export enum FriendRelationType {
+        Classmate = 'Classmate',
+        Colleague = 'Colleague',
+        Neighbor = 'Neighbor',
+    }
 
-    export function init(
-        player1Id: string,
-        player2Id: string,
-        timeline: RelationshipTimeline,
-        type: RelationshipType,
-    ): Relationship | null {
+    export type RelationType = FamilyRelationType | FriendRelationType;
+
+    const { Current, Future, Past } = RelationTimeline;
+    const { Child, Parent, Sibling, Spouse } = FamilyRelationType;
+    const { Classmate, Colleague, Neighbor } = FriendRelationType;
+
+    export const availableRelations: Relation[] = [
+        // Family - Spouse
+        { type: Spouse, timeline: Current },
+        // Family - Sibling
+        { type: Sibling, timeline: Current },
+
+        // Family - Parent
+        { type: Parent, timeline: Current },
+
+        // Family - Child
+        { type: Child, timeline: Current },
+
+        // Friend - Neighbor
+        { type: Neighbor, timeline: Current },
+
+        // Friend - Colleague
+        { type: Colleague, timeline: Current },
+
+        // Friend - Classmate
+        { type: Classmate, timeline: Current },
+    ];
+
+    export function init(character: CharacterAPI.Character, relation: Relation): Relationship {
         return {
             id: IdUtil.generateUUID(),
-            player1Id,
-            player2Id,
-            timeline,
-            type,
+            character,
+            relation,
         };
+    }
+
+    export function toString(relationship: Relationship): string {
+        return [
+            'Relation Type\t' + relationship.relation.type,
+            'Relation Time\t' + relationship.relation.timeline,
+            'Relation To\t' + relationship.character.name,
+        ].join('\n');
     }
 }
