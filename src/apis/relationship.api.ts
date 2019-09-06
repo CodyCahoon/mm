@@ -69,10 +69,8 @@ export namespace RelationshipAPI {
     }
 
     export function toString(relationship: Relationship): string {
-        return [
-            'Relation Type\t' + relationship.relation.type,
-            'Relation Time\t' + relationship.relation.timeline,
-            'Relation To\t' + relationship.character.name,
-        ].join('\n');
+        const { relation, character } = relationship;
+        const { type, timeline } = relation;
+        return `Relationship\t${timeline} ${type} to ${character.name}`;
     }
 }

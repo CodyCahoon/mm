@@ -39,7 +39,7 @@ export namespace GameAPI {
             return players.concat(PlayerAPI.toString(p) + '\n');
         }, '');
 
-        const murdererCount = game.players.filter((p) => p.type === PlayerAPI.PlayerType.Murderer);
+        const murdererCount = game.players.filter((p) => p.type === PlayerAPI.PlayerType.Murderer).length;
 
         return [
             '=====================================================',

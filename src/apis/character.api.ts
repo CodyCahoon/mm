@@ -28,7 +28,7 @@ export namespace CharacterAPI {
         }
 
         const { name, relationships } = character;
-        return ['CharacterName\t' + name]
+        return ['Character\t' + name]
             .concat(Array.from(relationships).map((r: RelationshipAPI.Relationship) => RelationshipAPI.toString(r)))
             .join('\n');
     }
