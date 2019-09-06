@@ -1,20 +1,24 @@
 import { IdUtil } from '../utils/id.util';
+import { RelationshipAPI } from './relationship.api';
 
 export namespace CharacterAPI {
     export interface Character {
         id: string;
 
         name: string;
-        // @todo - sex: Sex;
-        // @todo - description: string;
-        // @todo - job: Job;
-        // @todo - image: string;
+        relationships: Set<RelationshipAPI.Relationship>;
+        // todo - age: number
+        // todo - sex: Sex;
+        // todo - description: string;
+        // todo - job: Job;
+        // todo - image: string;
     }
 
     export function init(name: string): Character {
         return {
             id: IdUtil.generateUUID(),
             name,
+            relationships: new Set(),
         };
     }
 
@@ -22,6 +26,10 @@ export namespace CharacterAPI {
         if (!character) {
             return 'Character\tundefined';
         }
-        return `Character\t${character.name}`;
+
+        const { name, relationships } = character;
+        return ['CharacterName\t' + name]
+            .concat(Array.from(relationships).map((r: RelationshipAPI.Relationship) => RelationshipAPI.toString(r)))
+            .join('\n');
     }
 }
