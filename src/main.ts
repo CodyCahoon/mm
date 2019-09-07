@@ -44,6 +44,9 @@ function generateGame(): GameAPI.Game {
         // 1. more than 2 parents
         // 2. more than 1 spouse
         const relation = ArrayUtil.random(availableRelations);
+        if (!relation) {
+            continue;
+        }
         const relationshipToMurderee = RelationshipAPI.init(murderee, relation);
         const relationshipToPlayer = RelationshipAPI.init(character, relation);
 
@@ -53,6 +56,9 @@ function generateGame(): GameAPI.Game {
 
     // todo - pick murderer (one for now)
     const murderer = ArrayUtil.random(game.players);
+    if (!murderer) {
+        return game;
+    }
     game.players.forEach((p) => (p.type = PlayerAPI.PlayerType.NonMurderer));
     murderer.type = PlayerAPI.PlayerType.Murderer;
 
