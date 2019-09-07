@@ -35,6 +35,9 @@ function generateGame(): GameAPI.Game {
     const murderer = SetUtil.random(game.players);
     murderer.type = PlayerAPI.PlayerType.Murderer;
 
+    // todo - Assign first round objectives
+    // todo - Assign first round clues
+
     return game;
 }
 
