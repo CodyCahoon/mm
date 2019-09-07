@@ -3,6 +3,8 @@ import { CharacterAPI } from './character.api';
 import { PlayerAPI } from './player.api';
 import { SetUtil } from '../utils/set.util';
 import { RelationshipAPI } from './relationship.api';
+import { ObjectiveAPI } from './objective.api';
+import { ClueAPI } from './clue.api';
 
 export namespace GameAPI {
     export interface Game {
@@ -47,6 +49,14 @@ export namespace GameAPI {
                 RelationshipAPI.FriendRelationshipType.Colleague,
                 RelationshipAPI.FriendRelationshipType.Neighbor,
             ]),
+    };
+
+    export const availableCluesByTheme: Record<GameTheme, () => Set<ClueAPI.Clue>> = {
+        [GameTheme.Western]: () => new Set([ClueAPI.init('', '')]),
+    };
+
+    export const availableObjectivesByTheme: Record<GameTheme, () => Set<ObjectiveAPI.Objective>> = {
+        [GameTheme.Western]: () => new Set([ObjectiveAPI.init('')]),
     };
 
     export function init(theme: GameTheme): Game {
