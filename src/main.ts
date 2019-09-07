@@ -1,7 +1,7 @@
 import { GameAPI } from './apis/game.api';
 import { PlayerAPI } from './apis/player.api';
 import { RelationshipAPI } from './apis/relationship.api';
-import { ArrayUtil } from './utils/array.util';
+import { SetUtil } from './utils/set.util';
 
 function generateGame(): GameAPI.Game {
     // todo - @prompt - Select theme for game
@@ -10,56 +10,29 @@ function generateGame(): GameAPI.Game {
 
     // todo - @prompt - Choose number of players participating in the game
     const playerCount = 4;
-    const players: PlayerAPI.Player[] = PlayerAPI.initMany(playerCount);
+    game.players = PlayerAPI.initMany(playerCount);
 
     // todo - @prompt - Players enter their own name
-    players[0].name = 'Player #1';
-    players[1].name = 'Player #2';
-    players[2].name = 'Player #3';
-    players[3].name = 'Player #4';
-
-    // todo - @prompt? - Select difficulty
-
     // todo - @prompt - Players select their characters (or allow random selection for player)
-    const availableCharacters = GameAPI.availableCharactersByTheme[theme];
-    players[0].character = availableCharacters[0];
-    players[1].character = availableCharacters[1];
-    players[2].character = availableCharacters[2];
-    players[3].character = availableCharacters[3];
-    game.players = players;
+    let playerNumber = 1;
+    game.players.forEach((player: PlayerAPI.Player) => {
+        player.name = 'Player #' + playerNumber++;
+        player.character = GameAPI.selectRandomCharacter(game);
+    });
 
-    // todo - Select random murderee
-    const murderee = availableCharacters[4];
+    // Randomly assign murdered character
+    const murderedCharacter = GameAPI.selectRandomCharacter(game);
 
-    // todo - Generate relationships to murderer based off character selections
-    const availableRelations = RelationshipAPI.availableRelations;
-    for (let player of players) {
-        if (!player.character) {
-            continue;
-        }
-
+    // Generate relationships to murdered character
+    game.players.forEach((player: PlayerAPI.Player) => {
         const { character } = player;
+        const relationshipType = GameAPI.selectRandomRelationshipType(game);
+        const relationshipToMurderededCharacter = RelationshipAPI.init(murderedCharacter, relationshipType);
+        character.relationships.add(relationshipToMurderededCharacter);
+    });
 
-        // todo - prevent conflicting relations
-        // 1. more than 2 parents
-        // 2. more than 1 spouse
-        const relation = ArrayUtil.random(availableRelations);
-        if (!relation) {
-            continue;
-        }
-        const relationshipToMurderee = RelationshipAPI.init(murderee, relation);
-        const relationshipToPlayer = RelationshipAPI.init(character, relation);
-
-        character.relationships.add(relationshipToMurderee);
-        murderee.relationships.add(relationshipToPlayer);
-    }
-
-    // todo - pick murderer (one for now)
-    const murderer = ArrayUtil.random(game.players);
-    if (!murderer) {
-        return game;
-    }
-    game.players.forEach((p) => (p.type = PlayerAPI.PlayerType.NonMurderer));
+    // Randomly select murderer
+    const murderer = SetUtil.random(game.players);
     murderer.type = PlayerAPI.PlayerType.Murderer;
 
     return game;

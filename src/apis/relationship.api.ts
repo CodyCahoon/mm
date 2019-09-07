@@ -5,72 +5,34 @@ export namespace RelationshipAPI {
     export interface Relationship {
         id: string;
         character: CharacterAPI.Character;
-        relation: Relation;
+        type: RelationshipType;
     }
 
-    export interface Relation {
-        timeline: RelationTimeline;
-        type: RelationType;
-    }
-
-    export enum RelationTimeline {
-        Current = 'Currently',
-        Future = 'In the Future',
-        Past = 'In the Past',
-    }
-
-    export enum FamilyRelationType {
+    export enum FamilyRelationshipType {
         Child = 'Child',
         Parent = 'Parent',
         Sibling = 'Sibling',
         Spouse = 'Spouse',
     }
 
-    export enum FriendRelationType {
+    export enum FriendRelationshipType {
         Classmate = 'Classmate',
         Colleague = 'Colleague',
         Neighbor = 'Neighbor',
     }
 
-    export type RelationType = FamilyRelationType | FriendRelationType;
+    export type RelationshipType = FamilyRelationshipType | FriendRelationshipType;
 
-    const { Current, Future, Past } = RelationTimeline;
-    const { Child, Parent, Sibling, Spouse } = FamilyRelationType;
-    const { Classmate, Colleague, Neighbor } = FriendRelationType;
-
-    export const availableRelations: Relation[] = [
-        // Family - Spouse
-        { type: Spouse, timeline: Current },
-        // Family - Sibling
-        { type: Sibling, timeline: Current },
-
-        // Family - Parent
-        { type: Parent, timeline: Current },
-
-        // Family - Child
-        { type: Child, timeline: Current },
-
-        // Friend - Neighbor
-        { type: Neighbor, timeline: Current },
-
-        // Friend - Colleague
-        { type: Colleague, timeline: Current },
-
-        // Friend - Classmate
-        { type: Classmate, timeline: Current },
-    ];
-
-    export function init(character: CharacterAPI.Character, relation: Relation): Relationship {
+    export function init(character: CharacterAPI.Character, type: RelationshipType): Relationship {
         return {
             id: IdUtil.generateUUID(),
             character,
-            relation,
+            type,
         };
     }
 
     export function toString(relationship: Relationship): string {
-        const { relation, character } = relationship;
-        const { type, timeline } = relation;
-        return `Relationship\t${timeline} ${type} to ${character.name}`;
+        const { type, character } = relationship;
+        return `Relationship\t${type} to ${character.name}`;
     }
 }

@@ -1,34 +1,34 @@
 import { CharacterAPI } from './character.api';
 import { IdUtil } from '../utils/id.util';
-import { RelationshipAPI } from './relationship.api';
 
 export namespace PlayerAPI {
     export interface Player {
         id: string;
 
-        character?: CharacterAPI.Character;
-        name?: string;
+        character: CharacterAPI.Character;
+        name: string;
         type: PlayerType;
     }
 
     export enum PlayerType {
         Murderer = 'Murderer',
         NonMurderer = 'Non-Murderer',
-        Unknown = 'Unknown',
     }
 
     export function init(): Player {
         return {
             id: IdUtil.generateUUID(),
-            type: PlayerType.Unknown,
+            character: CharacterAPI.init(''),
+            name: '',
+            type: PlayerType.NonMurderer,
         };
     }
 
-    export function initMany(playerCount: number): Player[] {
-        const players = [] as Player[];
+    export function initMany(playerCount: number): Set<Player> {
+        const players = new Set<Player>();
         for (let i = 0; i < playerCount; i++) {
             const newPlayer = init();
-            players.push(newPlayer);
+            players.add(newPlayer);
         }
         return players;
     }
