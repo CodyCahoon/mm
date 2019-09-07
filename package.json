@@ -10,7 +10,7 @@
     },
     "scripts": {
         "mm": "tsc && node ./build/main.js",
-        "test": "jest",
+        "test": "tsc && jest",
         "tsc": "tsc"
     },
     "repository": {
